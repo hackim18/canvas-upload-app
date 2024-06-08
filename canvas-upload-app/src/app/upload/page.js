@@ -11,6 +11,8 @@ const UploadPage = () => {
   const [imageURL, setImageURL] = useState(null);
   const [imageProps, setImageProps] = useState({ x: 0, y: 0, width: defaultCanvasSize.width, height: defaultCanvasSize.height });
   const [rotation, setRotation] = useState(0);
+  const [flipHorizontal, setFlipHorizontal] = useState(false);
+  const [flipVertical, setFlipVertical] = useState(false);
   const [error, setError] = useState(null);
   const [tempCanvasSize, setTempCanvasSize] = useState(defaultCanvasSize);
 
@@ -44,6 +46,29 @@ const UploadPage = () => {
   const handleImageUpload = async (event) => {
     event.preventDefault();
     setError(null);
+
+    if (!imageFile || !imageFile.type.startsWith("image/")) {
+      toast.error("Please upload a valid image file", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    } else {
+      toast.success("Image uploaded successfully", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
 
     const formData = new FormData();
     formData.append("image", imageFile);
@@ -121,7 +146,14 @@ const UploadPage = () => {
         </button>
       </form>
 
-      <CanvasComponent imageURL={imageURL} canvasSize={canvasSize} imageProps={imageProps} rotation={rotation} />
+      <CanvasComponent
+        imageURL={imageURL}
+        canvasSize={canvasSize}
+        imageProps={imageProps}
+        rotation={rotation}
+        flipHorizontal={flipHorizontal}
+        flipVertical={flipVertical}
+      />
 
       {imageURL && (
         <div className="mt-3">
@@ -167,8 +199,35 @@ const UploadPage = () => {
               <label className="form-label">Rotation (degrees):</label>
               <input type="number" className="form-control" value={rotation} onChange={(e) => setRotation(parseInt(e.target.value) || 0)} />
             </div>
+            <div className="col">
+              <label className="form-label">Flip Horizontal:</label>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={flipHorizontal}
+                onChange={() => setFlipHorizontal(!flipHorizontal)}
+              />
+            </div>
+            <div className="col">
+              <label className="form-label">Flip Vertical:</label>
+              <input type="checkbox" className="form-check-input" checked={flipVertical} onChange={() => setFlipVertical(!flipVertical)} />
+            </div>
             <div className="col align-self-end">
-              <button className="btn btn-primary" onClick={() => setImageProps({ ...imageProps })}>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setImageProps({ ...imageProps });
+                  toast.success("Image properties updated successfully", {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                }}
+              >
                 Change Size
               </button>
             </div>
