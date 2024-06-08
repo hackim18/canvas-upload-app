@@ -10,13 +10,14 @@ const UploadPage = () => {
   const [imageURL, setImageURL] = useState(null);
   const [imageProps, setImageProps] = useState({ x: 0, y: 0, width: defaultCanvasSize.width, height: defaultCanvasSize.height });
   const [error, setError] = useState(null);
+  const [tempCanvasSize, setTempCanvasSize] = useState(defaultCanvasSize);
 
   const handleCanvasSizeChange = () => {
-    if (canvasSize.width < 100 || canvasSize.height < 100) {
+    if (tempCanvasSize.width < 100 || tempCanvasSize.height < 100) {
       setError("Canvas size cannot be less than 100x100");
       return;
     }
-    setCanvasSize({ ...canvasSize });
+    setCanvasSize({ ...tempCanvasSize });
     setError(null);
   };
 
@@ -34,7 +35,16 @@ const UploadPage = () => {
         },
       });
 
-      setImageURL(URL.createObjectURL(imageFile));
+      const newImageURL = URL.createObjectURL(imageFile);
+      setImageURL(newImageURL);
+
+      const img = new Image();
+      img.onload = () => {
+        const scaleWidth = img.width > canvasSize.width ? canvasSize.width : img.width;
+        const scaleHeight = img.height > canvasSize.height ? canvasSize.height : img.height;
+        setImageProps({ x: 0, y: 0, width: scaleWidth, height: scaleHeight });
+      };
+      img.src = newImageURL;
     } catch (error) {
       setError(error.response?.data?.error || "Error uploading image");
     }
@@ -57,8 +67,8 @@ const UploadPage = () => {
             <input
               type="number"
               className="form-control"
-              value={canvasSize.width}
-              onChange={(e) => setCanvasSize({ ...canvasSize, width: parseInt(e.target.value) })}
+              value={tempCanvasSize.width}
+              onChange={(e) => setTempCanvasSize({ ...tempCanvasSize, width: parseInt(e.target.value) || 0 })}
               disabled={!!imageURL}
             />
           </div>
@@ -67,8 +77,8 @@ const UploadPage = () => {
             <input
               type="number"
               className="form-control"
-              value={canvasSize.height}
-              onChange={(e) => setCanvasSize({ ...canvasSize, height: parseInt(e.target.value) })}
+              value={tempCanvasSize.height}
+              onChange={(e) => setTempCanvasSize({ ...tempCanvasSize, height: parseInt(e.target.value) || 0 })}
               disabled={!!imageURL}
             />
           </div>
@@ -99,7 +109,7 @@ const UploadPage = () => {
                 type="number"
                 className="form-control"
                 value={imageProps.x}
-                onChange={(e) => setImageProps({ ...imageProps, x: parseInt(e.target.value) })}
+                onChange={(e) => setImageProps({ ...imageProps, x: parseInt(e.target.value) || 0 })}
               />
             </div>
             <div className="col">
@@ -108,7 +118,7 @@ const UploadPage = () => {
                 type="number"
                 className="form-control"
                 value={imageProps.y}
-                onChange={(e) => setImageProps({ ...imageProps, y: parseInt(e.target.value) })}
+                onChange={(e) => setImageProps({ ...imageProps, y: parseInt(e.target.value) || 0 })}
               />
             </div>
             <div className="col">
@@ -117,7 +127,7 @@ const UploadPage = () => {
                 type="number"
                 className="form-control"
                 value={imageProps.width}
-                onChange={(e) => setImageProps({ ...imageProps, width: parseInt(e.target.value) })}
+                onChange={(e) => setImageProps({ ...imageProps, width: parseInt(e.target.value) || 0 })}
               />
             </div>
             <div className="col">
@@ -126,7 +136,7 @@ const UploadPage = () => {
                 type="number"
                 className="form-control"
                 value={imageProps.height}
-                onChange={(e) => setImageProps({ ...imageProps, height: parseInt(e.target.value) })}
+                onChange={(e) => setImageProps({ ...imageProps, height: parseInt(e.target.value) || 0 })}
               />
             </div>
             <div className="col align-self-end">

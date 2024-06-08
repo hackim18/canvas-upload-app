@@ -7,7 +7,6 @@ const CanvasComponent = ({ imageURL, canvasSize, imageProps, setImageProps }) =>
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (imageURL) {
