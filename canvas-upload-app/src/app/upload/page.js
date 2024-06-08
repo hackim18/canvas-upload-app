@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import CanvasComponent from "@/components/CanvasComponent";
+import { showError, showSuccess } from "../lib/react-toastify";
 
 const UploadPage = () => {
   const defaultCanvasSize = { width: 640, height: 360 };
@@ -18,26 +19,10 @@ const UploadPage = () => {
 
   const handleCanvasSizeChange = () => {
     if (tempCanvasSize.width < 100 || tempCanvasSize.height < 100) {
-      toast.error("Canvas size cannot be less than 100x100", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showError("Canvas size must be at least 100x100");
       return;
     } else {
-      toast.success("Canvas size changed successfully", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showSuccess("Canvas size updated successfully");
     }
     setCanvasSize({ ...tempCanvasSize });
     setError(null);
@@ -48,26 +33,10 @@ const UploadPage = () => {
     setError(null);
 
     if (!imageFile || !imageFile.type.startsWith("image/")) {
-      toast.error("Please upload a valid image file", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showError("Please select a valid image file");
       return;
     } else {
-      toast.success("Image uploaded successfully", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showSuccess("Image uploaded successfully");
     }
 
     const formData = new FormData();
@@ -91,15 +60,7 @@ const UploadPage = () => {
       };
       img.src = newImageURL;
     } catch (error) {
-      toast.error(error.response?.data?.error || "Error uploading image", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showError(error.response?.data?.error || "Error uploading image");
     }
   };
 
@@ -217,15 +178,7 @@ const UploadPage = () => {
                 className="btn btn-primary"
                 onClick={() => {
                   setImageProps({ ...imageProps });
-                  toast.success("Image properties updated successfully", {
-                    position: "top-center",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                  });
+                  showSuccess("Image properties updated successfully");
                 }}
               >
                 Change Size
