@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 import CanvasComponent from "@/components/CanvasComponent";
 
 const UploadPage = () => {
@@ -9,13 +10,32 @@ const UploadPage = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imageURL, setImageURL] = useState(null);
   const [imageProps, setImageProps] = useState({ x: 0, y: 0, width: defaultCanvasSize.width, height: defaultCanvasSize.height });
+  const [rotation, setRotation] = useState(0);
   const [error, setError] = useState(null);
   const [tempCanvasSize, setTempCanvasSize] = useState(defaultCanvasSize);
 
   const handleCanvasSizeChange = () => {
     if (tempCanvasSize.width < 100 || tempCanvasSize.height < 100) {
-      setError("Canvas size cannot be less than 100x100");
+      toast.error("Canvas size cannot be less than 100x100", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return;
+    } else {
+      toast.success("Canvas size changed successfully", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
     setCanvasSize({ ...tempCanvasSize });
     setError(null);
@@ -46,18 +66,22 @@ const UploadPage = () => {
       };
       img.src = newImageURL;
     } catch (error) {
-      setError(error.response?.data?.error || "Error uploading image");
+      toast.error(error.response?.data?.error || "Error uploading image", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
   return (
     <div className="container mt-5">
       <h1>Upload Image to Canvas</h1>
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
+      <ToastContainer />
 
       <div className="mb-3">
         <h2>Canvas Properties</h2>
@@ -97,7 +121,7 @@ const UploadPage = () => {
         </button>
       </form>
 
-      <CanvasComponent imageURL={imageURL} canvasSize={canvasSize} imageProps={imageProps} setImageProps={setImageProps} />
+      <CanvasComponent imageURL={imageURL} canvasSize={canvasSize} imageProps={imageProps} rotation={rotation} />
 
       {imageURL && (
         <div className="mt-3">
@@ -138,6 +162,10 @@ const UploadPage = () => {
                 value={imageProps.height}
                 onChange={(e) => setImageProps({ ...imageProps, height: parseInt(e.target.value) || 0 })}
               />
+            </div>
+            <div className="col">
+              <label className="form-label">Rotation (degrees):</label>
+              <input type="number" className="form-control" value={rotation} onChange={(e) => setRotation(parseInt(e.target.value) || 0)} />
             </div>
             <div className="col align-self-end">
               <button className="btn btn-primary" onClick={() => setImageProps({ ...imageProps })}>
