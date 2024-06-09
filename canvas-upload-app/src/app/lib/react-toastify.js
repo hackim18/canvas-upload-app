@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 export const showError = (message) => {
   toast.error(message, {
     position: "top-center",
-    autoClose: 2000,
+    autoClose: 1200,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -15,7 +15,7 @@ export const showError = (message) => {
 export const showSuccess = (message) => {
   toast.success(message, {
     position: "top-center",
-    autoClose: 2000,
+    autoClose: 1200,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -27,7 +27,7 @@ export const showSuccess = (message) => {
 export const showWarning = (message) => {
   toast.warn(message, {
     position: "top-center",
-    autoClose: 2000,
+    autoClose: 1200,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -39,7 +39,7 @@ export const showWarning = (message) => {
 export const showInfo = (message) => {
   toast.info(message, {
     position: "top-center",
-    autoClose: 2000,
+    autoClose: 1200,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -51,7 +51,7 @@ export const showInfo = (message) => {
 export const showDefault = (message) => {
   toast(message, {
     position: "top-center",
-    autoClose: 2000,
+    autoClose: 1200,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

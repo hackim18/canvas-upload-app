@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import multer from "multer";
-import { Readable } from "stream";
 
-// Konfigurasi multer
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
@@ -14,7 +12,6 @@ const upload = multer({
   },
 });
 
-// Middleware handler
 const uploadMiddleware = upload.single("image");
 
 function runMiddleware(req, res, fn) {
@@ -36,11 +33,9 @@ export async function POST(request) {
     return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
   }
 
-  // Convert Blob to Buffer
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  // Create mock req and res objects
   const req = {
     headers: request.headers,
     file: {
