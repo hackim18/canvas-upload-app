@@ -24,7 +24,11 @@ const CanvasComponent = ({ imageURL, canvasSize, imageProps, rotation, flipHoriz
     }
   }, [imageURL, canvasSize, imageProps, rotation, flipHorizontal, flipVertical]);
 
-  return <canvas ref={canvasRef} width={canvasSize.width} height={canvasSize.height} style={{ border: "1px solid black" }} />;
+  return (
+    <div className="d-flex justify-content-center">
+      <canvas ref={canvasRef} width={canvasSize.width} height={canvasSize.height} style={{ border: "1px solid black" }} />
+    </div>
+  );
 };
 
 export default CanvasComponent;
